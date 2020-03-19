@@ -1,0 +1,12 @@
+server.port: 5566
+
+keycloak.realm = sincos
+keycloak.auth-server-url = https://3.6.222.109:8443/auth/
+keycloak.ssl-required = external
+keycloak.resource = my-api
+keycloak.bearer-only=true
+keycloak.confidential-port=0
+#keycloak.credentials.secret = 11111111-1111-1111-1111-111111111111
+#keycloak.use-resource-role-mappings = true
+
+keycloak.security-constraints=

@@ -1,0 +1,18 @@
+server:
+  port: 5566
+keycloak:
+  enabled: true
+  realm: sincos
+  auth-server-url: http://3.6.222.109:8080/auth/
+  ssl-required: external
+  resource: my-api
+  bearer-only: true
+  confidential-port: 0
+  cors: true
+  security-constraints:
+    - auth-roles:
+      - manage-account
+      security-collections:
+      - name: sercured
+        patterns:
+        - /aliens/kk
