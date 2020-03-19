@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SpringRestApiApplication {
 
 	public static void main(String[] args) {
+
+		//registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+
 		SpringApplication.run(SpringRestApiApplication.class, args);
 	}
 

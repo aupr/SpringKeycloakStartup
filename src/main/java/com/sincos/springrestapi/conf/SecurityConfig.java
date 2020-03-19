@@ -18,20 +18,30 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 /**
  * @author Edward P. Legaspi
  */
+
 @KeycloakConfiguration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     private final KeycloakClientRequestFactory keycloakClientRequestFactory;
@@ -83,17 +93,38 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.cors() //
+        http
+                .cors()//.configurationSource(corsConfigurationSource()) //
                 .and() //
                 .csrf().disable() //
 //				.anonymous().disable() //
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //
                 .and() //
                 .authorizeRequests() //
+                //.antMatchers(HttpMethod.OPTIONS,"/**").permitAll()//allow CORS option calls
 //				.antMatchers("/users*").hasRole("USER") //
 //				.antMatchers("/admin*").hasRole("ADMIN") //
                 .anyRequest().permitAll(); //
     }
+
+
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+//        configuration.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
+
+
+//    @Override
+//    public void configure(WebSecurity web) throws Exception {
+//        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+//    }
+
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Bean
@@ -102,6 +133,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
         registrationBean.setEnabled(false);
         return registrationBean;
+
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -137,5 +169,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     protected HttpSessionManager httpSessionManager() {
         return new HttpSessionManager();
     }
+
+
 
 }

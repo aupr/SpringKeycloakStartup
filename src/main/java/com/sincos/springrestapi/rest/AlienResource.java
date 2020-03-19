@@ -1,9 +1,12 @@
 package com.sincos.springrestapi.rest;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+//@CrossOrigin
 //@CrossOrigin(origins = "*")
 public class AlienResource {
 
@@ -13,10 +16,17 @@ public class AlienResource {
     }
 
     @GetMapping("item/{name}/{item_type}")
-    public String getuuu(@PathVariable("name") String myName,@PathVariable("item_type") String myItemType) {
+    public Map<String, String> getuuu(@PathVariable("name") String myName,@PathVariable("item_type") String myItemType) {
         //Do your business with your name and item_type path Variable
 
-        return myName+"/"+myItemType;
+        //return myName+"/"+myItemType;
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put(myName, myItemType);
+            map.put("foo", "bar");
+            map.put("aa", "bb");
+            return map;
+
     }
 
     //@CrossOrigin(methods = RequestMethod.GET)
